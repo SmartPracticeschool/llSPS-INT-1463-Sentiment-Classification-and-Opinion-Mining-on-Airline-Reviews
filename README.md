@@ -1,5 +1,5 @@
 # llSPS-INT-1463-Sentiment-Classification-and-Opinion-Mining-on-Airline-Reviews
-Member of the team:
+Members of the team:
 Vanam Shubhasri, 
 Mikkilineni Aarthi,
 Aakiti Samhitha,
