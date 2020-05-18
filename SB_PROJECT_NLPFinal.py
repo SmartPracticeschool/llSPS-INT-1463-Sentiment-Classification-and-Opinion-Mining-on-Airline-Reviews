@@ -21,6 +21,10 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from keras.models import Sequential
+from keras.layers import Dense
+from sklearn.feature_extraction.text import CountVectorizer
+
 
 #3. Importing the dataset
 #tsk: 26442
@@ -55,21 +59,19 @@ dataset.drop(['tweet_id'], inplace=True, axis=1)
 dataset.drop(['name'], inplace=True, axis=1)
 dataset.drop(['tweet_coord','tweet_created', 'tweet_location', 'user_timezone'], inplace=True, axis=1)
 dataset.drop(['airline_sentiment_confidence','negativereason', 'negativereason_confidence', 'negativereason_gold'], inplace=True, axis=1)
-dataset.drop(['airline_sentiment_gold'], inplace=True,axis=1)
+dataset.drop(['airline_sentiment_gold', 'airline'], inplace=True,axis=1)
     #LabelEncoding
 le = LabelEncoder()
 dataset['airline_sentiment'] = le.fit_transform(dataset['airline_sentiment'])
-dataset['airline'] = le.fit_transform(dataset['airline'])
-    #OneHotEncoding
-x = dataset.iloc[:, 1:].values
+ #OneHotEncoding
+x = dataset.iloc[:, 1:2].values
 y = dataset.iloc[:, 0:1].values
+#onehot encoder
+from sklearn.preprocessing import OneHotEncoder
 one = OneHotEncoder()
-a = one.fit_transform(x[:, 0:1]).toarray()
-x = np.delete(x, 0, axis=1)
-x = np.concatenate((a, x), axis=1)
-c = one.fit_transform(y[:, 0:1]).toarray()
-y = np.delete(y, 0, axis=1)
-y = np.concatenate((c, y), axis=1)
+a = one.fit_transform(y[:,0:1]).toarray()
+y = np.delete(x, 0, axis=1)
+y = np.concatenate((a, y), axis=1)
     #train and test
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
 
@@ -83,7 +85,6 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-
 ps=PorterStemmer()
 data=[] 
 for i in range(0,14640):
@@ -95,10 +96,44 @@ for i in range(0,14640):
     review=' '.join(review) 
     data.append(review) 
     
-from sklearn.feature_extraction.text import CountVectorizer #for tokeniser i.e,binary
-cv = CountVectorizer(max_features = 2000)
-x = cv.fit_transform(data).toarray()
-y = dataset.iloc[:,0:3].values
+#CountVectorization
+#Mikkilineni Aarthi, Vadugula Anudeepa
 
+from sklearn.feature_extraction.text import CountVectorizer
+cv = CountVectorizer(max_features=2000)
+x1 = cv.fit_transform(data).toarray()
+y1 = dataset.iloc[:,0:1].values
+
+#Splitting into test and train
+#tsk: 26451
+#Shubhasri Vanam, Thadka S Keerthika
 from sklearn.model_selection import train_test_split
-x_train,x_test,y_train,y_test = train_test_split(x,y,random_state=0,test_size=0.2)
+x_train1,x_test1,y_train1,y_test1=train_test_split(x1,y1,test_size=0.2,random_state=0)
+
+#Model Building
+#Team 40 
+from keras.models import Sequential
+from keras.layers import Dense
+model=Sequential()
+model.add(Dense(units=2000,init='uniform',activation='relu'))
+model.add(Dense(units=4000,init='uniform',activation='relu'))
+model.add(Dense(units=1,init='uniform',activation='sigmoid'))
+model.compile(optimizer='adam',loss='binary_crossentropy',metrics=['accuracy'])
+model.fit(x_train1,y_train1,epochs=10,batch_size=32)
+
+model.save("airline_predictions.h5")
+
+#Accuracy 82.3%
+
+#prediction
+#Team 40
+text='Hey it was bad'
+text=re.sub('[^a-zA-z]',' ',text)
+text=text.lower()
+text=text.split()
+text=[ps.stem(word) for word in text if not word in set(stopwords.words('english'))]
+text=' '.join(text)
+pred=model.predict(cv.transform([text]))
+pred = pred>0.5
+
+print(pred)
