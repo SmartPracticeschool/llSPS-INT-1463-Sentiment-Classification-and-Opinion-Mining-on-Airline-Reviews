@@ -98,7 +98,6 @@ for i in range(0,14640):
     
 #CountVectorization
 #Mikkilineni Aarthi, Vadugula Anudeepa
-
 from sklearn.feature_extraction.text import CountVectorizer
 cv = CountVectorizer(max_features=2000)
 x1 = cv.fit_transform(data).toarray()
@@ -111,7 +110,7 @@ from sklearn.model_selection import train_test_split
 x_train1,x_test1,y_train1,y_test1=train_test_split(x1,y1,test_size=0.2,random_state=0)
 
 #Model Building
-#Team 40 
+#Team 40
 from keras.models import Sequential
 from keras.layers import Dense
 model=Sequential()
