@@ -4,7 +4,7 @@ Vanam Shubhasri,
 Mikkilineni Aarthi,
 Aakiti Samhitha,
 Vadugula Anudeepa,
-Thadka S Keethika
+Thadka S Keerthika
 
 Sentiment Classification And Opinion Mining On Airline Reviews
 
