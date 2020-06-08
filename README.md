@@ -1,10 +1,11 @@
 # llSPS-INT-1463-Sentiment-Classification-and-Opinion-Mining-on-Airline-Reviews
 Members of the team:
-Vanam Shubhasri, 
-Mikkilineni Aarthi,
-Aakiti Samhitha,
-Vadugula Anudeepa,
+Akkiti Samhitha
+Vadugula Anudeepa
+Shubhasri Vanam
+Mikkilineni Aarthi
 Thadka S Keerthika
+
 
 Sentiment Classification And Opinion Mining On Airline Reviews
 
